@@ -1,0 +1,60 @@
+//consultas para verificação
+db.Celulares.find()
+db.Usuarios.find()
+db.Ratings.find()
+
+
+//consulta de idade minima e máxima
+db.Usuarios.aggregate ({$group: { _id: 0,
+                              contagem : {$count: {} },
+                              menor_idade : {$min : "$age"},
+                              maior_idade : {$max : "$age"} ,
+                              media_idade : {$avg: "$age"} } } )
+
+
+//marca por camera + quantidade
+db.Celulares.aggregate({$group: {_id: {marca: "$brand"},
+                                 contagem: {$count: {}}})
+
+
+//profissão por genero + quantidade
+db.Usuarios.aggregate({$group: {_id: {profissao: "$occupation", genero: "$gender"},
+                                 contagem: {$count: {}}}))
+
+
+ //relacao usuário, nota e celular
+ db.Ratings.aggregate([
+    {$match : {"user_id":{$exists: true}}
+    {$lookup: 
+        {from: "Usuarios",
+         localField: "user_id",
+         foreignField:  "user_id",
+         as: "User" } },
+    {$lookup:
+       {from : "Celulares" ,
+        localField :   "cellphone_id",
+        foreignField :  "cellphone_id",
+        as: "Cellphone" } }
+    {$project: {_id:0 , user_id: 1, rating: 1, "Cellphone.model":1 } } ] )
+
+
+//média de avaliações por profissao e genero dos usuários
+ db.Usuarios.aggregate([
+    {$match : {"user_id":{$exists: true}}
+    {$lookup: 
+        {from: "Ratings",
+         localField: "user_id",
+         foreignField:  "user_id",
+         as: "Usuario" } 
+     {$project: {_id:0, genero: "$gender", profissao: "$occupation", media_avaliacoes: {$avg: "$Usuario.rating"}}}}}])
+
+
+//média de avaliações por celular
+db.Celulares.aggregate([
+    {$match : {"cellphone_id”{$exists: true}}
+    {$lookup: 
+        {from: "Ratings",
+         localField: "cellphone_id",
+         foreignField:  "cellphone_id",
+         as: "Celular" } 
+     {$project: {_id:0, celular: "$model", media_avaliacoes: {$avg: "$Celular.rating"}}}}}])

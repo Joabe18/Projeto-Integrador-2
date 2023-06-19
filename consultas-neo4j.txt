@@ -1,0 +1,34 @@
+// recomendação de celulares que nao avaliou mas pessoas da mesma idade e 
+// profissao avaliaram bem
+MATCH (u1)-[a1:Avaliacoes]->(c1)<-[a2:Avaliacoes]-(u2)-[a3:Avaliacoes]->(c2)
+ WHERE a1.avaliacao > '7'
+ AND a2.avaliacao > '7'
+ AND a3.avaliacao > '7'
+ AND u1.occupation = u2.occupation
+ AND u1.age = u2.age
+ AND u1.user_id <> u2.user_id
+ AND c1 <> c2
+ WITH u1.user_id AS usuario_1, u2.user_id AS usuario_2, c1.model AS celular_avaliado, c2.model AS celular_n_avaliado, u1.occupation AS profissao_user1, u2.occupation AS profissao_user2
+ RETURN usuario_1,celular_avaliado, profissao_user1, usuario_2, celular_n_avaliado, profissao_user2 LIMIT 200
+
+
+// recomendacao de celulares da mesma marca e capacidade de memoria de celulares que o usuario ja avaliou bem 
+MATCH(u1:Usuarios)-[r1:Avaliacoes]->(c1:Celulares)<-[r2:Avaliacoes]-(u2:Usuarios)-[r3:Avaliacoes]->(c2:Celulares)
+ WHERE c1.brand = c2.brand 
+ AND c1.internal_memory = c2.internal_memory
+ AND r1.avaliacao > '7'
+ AND r2.avaliacao > '7'
+ AND r3.avaliacao > '7'
+ AND c1 <> c2
+ WITH u1.user_id AS usuario_1, c1.model AS celular_ja_avaliado, c1.internal_memory AS memoria_ja_avaliada, c2.model AS celular_recomendado, c2.internal_memory AS memoria_recomendada
+ RETURN usuario_1, celular_ja_avaliado, memoria_ja_avaliada, celular_recomendado, memoria_recomendada
+
+
+// melhor configuração para fotografo
+ MATCH (u)-[a]->(c)
+ WHERE u.occupation =~ '(?i).*Photo.*'
+ AND toInteger(c.main_camera) >= 100
+ AND toInteger(c.selfie_camera) >= 32
+ RETURN u.user_id, u.occupation, c.main_camera, c.selfie_camera, c.model 
+ ORDER BY c.main_camera, c.selfie_camera DESC
+
