@@ -37,7 +37,7 @@ Criamos um banco de dados de grafo utilizando o banco de dados Neo4j. Também re
 
 # MongoDB
 
-Também utilizamos o MongoDB para criação de consultas para extrair insights do dataset escolhido, alguns exemplos de consultas que elaboramos são:
+Também utilizamos o banco de dados MongoDB para criação de consultas para extrair insights do dataset escolhido, alguns exemplos de consultas que elaboramos são:
 
 - Relação usuário, nota e celular;
 
