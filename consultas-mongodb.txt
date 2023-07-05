@@ -50,11 +50,11 @@ db.Usuarios.aggregate({$group: {_id: {profissao: "$occupation", genero: "$gender
 
 
 //média de avaliações por celular
-db.Celulares.aggregate([
-    {$match : {"cellphone_id”{$exists: true}}
-    {$lookup: 
-        {from: "Ratings",
-         localField: "cellphone_id",
-         foreignField:  "cellphone_id",
-         as: "Celular" } 
-     {$project: {_id:0, celular: "$model", media_avaliacoes: {$avg: "$Celular.rating"}}}}}])
+db.Usuarios.aggregate([
+   {$match : {"user_id":{$exists: true}}},
+   {$lookup: 
+	   {from: "Ratings",
+	    localField: "user_id",
+		foreignField:  "user_id",
+        as: "Usuario" }},
+    {$project: {_id:0, genero: "$gender", profissao: "$occupation", media_avaliacoes: {$avg: "$Usuario.rating"}}}])
