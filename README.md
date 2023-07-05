@@ -45,4 +45,4 @@ Também utilizamos o banco de dados MongoDB para criação de consultas para ext
 
 - Média de avaliações por profissão e genêro dos usuários.
 
-<img width="552" alt="consultamongodb02" src="https://github.com/Joabe18/Joabe18/assets/87384920/a4b3b6bc-5396-4069-9d36-f08c8fddfe93"><br>
+<img width="548" alt="consultamongodb02" src="https://github.com/Joabe18/Sistema-de-Recomendacao-de-Celulares/assets/87384920/281e0d77-859c-481e-9169-39f6bfb90a70"><br>
